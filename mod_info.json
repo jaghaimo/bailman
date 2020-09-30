@@ -1,0 +1,10 @@
+{
+  "id": "bailman",
+  "name": "Bail Bondsman",
+  "version": "0.0.1",
+  "author": "Jaghaimo",
+  "description": "Advanced bounty manager for Starsector",
+  "gameVersion": "0.9.1a",
+  "modPlugin": "bailman.BailmanModPlugin",
+  "jars": ["bailman.jar"]
+}

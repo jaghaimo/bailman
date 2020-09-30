@@ -1,0 +1,8 @@
+*.zip
+.classpath
+.gradle/
+.project
+.settings/
+/bailman.jar
+bin/
+build/
