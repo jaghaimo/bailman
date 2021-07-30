@@ -11,7 +11,8 @@ import com.fs.starfarer.api.campaign.FleetAssignment;
  * 
  * TODO: Needs much better implementation.
  * 
- * TODO: Needs compount AIs (e.g. go to X, wait Z days, go to Y, despawn)
+ * TODO: Needs support compound AIs (e.g. go to X, wait Z days, go to Y,
+ * despawn).
  */
 public class AssignmentAi {
 

@@ -1,4 +1,4 @@
-package bountylib.intel;
+package bountylib.entity;
 
 import java.awt.Color;
 import java.util.List;
@@ -16,12 +16,15 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
 import bountylib.BountyHelper;
+import bountylib.BountyIntel;
+import lombok.Getter;
 
 /**
  * An assassination contract is a variation on regular bounty. The only
  * requirement for this bounty is to kill the flagship.
  */
-public class Assassination implements IntelEntity {
+@Getter
+public class AssassinationEntity implements BountyEntity {
 
     private String activity;
     private int bountyCredits;
@@ -30,7 +33,7 @@ public class Assassination implements IntelEntity {
     private PersonAPI person;
     private SectorEntityToken hideout;
 
-    public Assassination(int b, CampaignFleetAPI f, PersonAPI p, SectorEntityToken h) {
+    public AssassinationEntity(int b, CampaignFleetAPI f, PersonAPI p, SectorEntityToken h) {
         activity = f.getAI().getCurrentAssignmentType().getDescription().toLowerCase();
         activity = activity.replaceAll("system", "around");
 

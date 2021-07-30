@@ -13,7 +13,6 @@ import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
 import com.fs.starfarer.api.util.Misc;
-import com.fs.starfarer.api.util.WeightedRandomPicker;
 
 /**
  * TODO: This monolitic helper needs to be split up.
@@ -55,25 +54,6 @@ public class BountyHelper {
         int maxDangerLevel = DANGER_LEVEL.length;
 
         return DANGER_LEVEL[Math.min(dangerLevel, maxDangerLevel) - 1];
-    }
-
-    public static MarketAPI pickHideout(int level) {
-        WeightedRandomPicker<MarketAPI> picker = new WeightedRandomPicker<MarketAPI>();
-
-        for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
-            boolean isNotParticipating = !BountyEventData.isParticipating(market);
-            boolean isHidden = market.isHidden();
-            boolean isPlayerFaction = market.getFaction().isPlayerFaction();
-
-            if (isNotParticipating || isHidden || isPlayerFaction) {
-                continue;
-            }
-
-            float weight = 10 - Math.abs(market.getSize() - level);
-            picker.add(market, weight);
-        }
-
-        return picker.pick();
     }
 
     public static CampaignFleetAPI spawnFleet(int level, MarketAPI hideout, PersonAPI person) {

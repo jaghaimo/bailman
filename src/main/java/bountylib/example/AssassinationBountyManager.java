@@ -2,23 +2,18 @@ package bountylib.example;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
-import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
-import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseEventManager;
 
-import bountylib.BountyHelper;
-import bountylib.intel.Assassination;
-import bountylib.intel.BountyIntel;
-import bountylib.intel.IntelEntity;
-import level.DefaultLevel;
+import bountylib.BountyIntel;
+import bountylib.entity.AssassinationEntity;
+import bountylib.entity.EntityProvider;
 
 /**
- * This is an example of a bounty manager implemented using BountyLib.
- * 
- * Note: This class is not used anywhere
+ * This is an example bounty manager implemented using BountyLib. It can be
+ * loaded alongisde vanilla bounty manager to additionally provide up to 4
+ * Assassination bounties.
  */
-public class BountyManager extends BaseEventManager {
+public class AssassinationBountyManager extends BaseEventManager {
 
     // Note: Make sure your KEY is unique across the modverse.
     private static final String KEY = "$yourmod_BountyManager";
@@ -28,30 +23,26 @@ public class BountyManager extends BaseEventManager {
     private static int MIN_BOUNTIES = 0;
     private static int MAX_BOUNTIES = 4;
 
-    public BountyManager() {
+    public AssassinationBountyManager() {
         super();
         Global.getSector().getMemoryWithoutUpdate().set(KEY, this);
     }
 
     // Note: This is just a convenience method, not needed in your implementation.
     // Just make sure you always fetch the same object.
-    public static BountyManager getInstance() {
+    public static AssassinationBountyManager getInstance() {
         Object bountyObject = Global.getSector().getMemoryWithoutUpdate().get(KEY);
 
-        return (BountyManager) bountyObject;
+        return (AssassinationBountyManager) bountyObject;
     }
 
     @Override
     protected EveryFrameScript createEvent() {
         try {
-            int level = new DefaultLevel().pickLevel();
-            int bountyCredits = BountyHelper.calculateBountyCredits(level);
-            MarketAPI hideout = BountyHelper.pickHideout(level);
-            PersonAPI person = BountyHelper.createPerson(level, hideout.getFactionId());
-            CampaignFleetAPI fleet = BountyHelper.spawnFleet(level, hideout, person);
-            IntelEntity entity = new Assassination(bountyCredits, fleet, person, hideout.getPrimaryEntity());
 
-            return new BountyIntel(entity, fleet, person, fleet);
+            AssassinationEntity entity = EntityProvider.makeAssassinationEntity();
+
+            return new BountyIntel(entity, entity.getFleet(), entity.getPerson(), entity.getHideout());
         } catch (Exception exception) {
             return null;
         }

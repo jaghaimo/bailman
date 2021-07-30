@@ -1,4 +1,4 @@
-package bountylib.intel;
+package bountylib.entity;
 
 import java.awt.Color;
 import java.util.List;
@@ -18,6 +18,8 @@ import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
 import bountylib.BountyHelper;
+import bountylib.BountyIntel;
+import lombok.Getter;
 
 /**
  * Retrieval mission, defeat enemy fleet and retrieve the flagship. If
@@ -28,7 +30,8 @@ import bountylib.BountyHelper;
  * 
  * # TODO: This is unfinished
  */
-public class Retrieval implements IntelEntity {
+@Getter
+public class RetrievalEntity implements BountyEntity {
 
     private int bountyCredits;
     private int reputationGain;
@@ -37,7 +40,7 @@ public class Retrieval implements IntelEntity {
     private PersonAPI person;
     private SectorEntityToken hideout;
 
-    public Retrieval(int b, int r, CampaignFleetAPI c, FactionAPI f, PersonAPI p, SectorEntityToken h) {
+    public RetrievalEntity(int b, int r, CampaignFleetAPI c, FactionAPI f, PersonAPI p, SectorEntityToken h) {
         bountyCredits = b;
         reputationGain = r;
         fleet = c;
