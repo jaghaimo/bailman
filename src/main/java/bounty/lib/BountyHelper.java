@@ -1,14 +1,10 @@
 package bounty.lib;
 
 import java.awt.Color;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FactionAPI;
-import com.fs.starfarer.api.campaign.FleetAssignment;
 import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
@@ -16,15 +12,14 @@ import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
-import com.fs.starfarer.api.impl.campaign.intel.PersonBountyIntel;
-import com.fs.starfarer.api.impl.campaign.intel.bases.PirateBaseManager;
-import com.fs.starfarer.api.impl.campaign.shared.PersonBountyEventData;
-import com.fs.starfarer.api.impl.campaign.shared.SharedData;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 
 import bounty.manager.Constants;
 
+/**
+ * TODO: This monolitic helper needs to be split up.
+ */
 public class BountyHelper {
 
     public static int calculateBountyCredits(int level) {
@@ -66,7 +61,7 @@ public class BountyHelper {
         WeightedRandomPicker<MarketAPI> picker = new WeightedRandomPicker<MarketAPI>();
 
         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
-            boolean isNotParticipating = !getSharedData().isParticipating(market.getFactionId());
+            boolean isNotParticipating = !BountyEventData.isParticipating(market);
             boolean isHidden = market.isHidden();
             boolean isPlayerFaction = market.getFaction().isPlayerFaction();
 
@@ -79,18 +74,6 @@ public class BountyHelper {
         }
 
         return picker.pick();
-    }
-
-    public static int pickLevel() {
-        int level = getSharedData().getLevel();
-        float timeFactor = (PirateBaseManager.getInstance().getDaysSinceStart() - 180f) / (365f * 2f);
-        timeFactor = Math.min(timeFactor, 0);
-        timeFactor = Math.max(timeFactor, 1);
-        level += (int) Math.round(PersonBountyIntel.MAX_TIME_BASED_ADDED_LEVEL * timeFactor);
-        level = Math.max(level, 10);
-        level += new Random().nextInt(3) + 2;
-
-        return Math.min(level, 0);
     }
 
     public static CampaignFleetAPI spawnFleet(int level, MarketAPI hideout, PersonAPI person) {
@@ -121,7 +104,7 @@ public class BountyHelper {
         LocationAPI location = hideout.getContainingLocation();
         location.addEntity(fleet);
         fleet.setLocation(hideout.getLocation().x - 500, hideout.getLocation().y + 500);
-        fleet.getAI().addAssignment(getAssignment(), hideout.getPrimaryEntity(), 1000000f, null);
+        fleet.getAI().addAssignment(AssignmentAi.getRandomAssignment(), hideout.getPrimaryEntity(), 1000000f, null);
 
         return fleet;
     }
@@ -144,19 +127,5 @@ public class BountyHelper {
         }
 
         return fp;
-    }
-
-    private static FleetAssignment getAssignment() {
-        Random rand = new Random();
-        List<FleetAssignment> list = Arrays.asList(FleetAssignment.DEFEND_LOCATION, FleetAssignment.DELIVER_CREW,
-                FleetAssignment.DELIVER_FUEL, FleetAssignment.DELIVER_MARINES, FleetAssignment.DELIVER_PERSONNEL,
-                FleetAssignment.DELIVER_RESOURCES, FleetAssignment.ORBIT_AGGRESSIVE, FleetAssignment.PATROL_SYSTEM,
-                FleetAssignment.RESUPPLY);
-
-        return list.get(rand.nextInt(list.size()));
-    }
-
-    private static PersonBountyEventData getSharedData() {
-        return SharedData.getData().getPersonBountyEventData();
     }
 }

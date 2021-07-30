@@ -8,6 +8,7 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseEventManager;
 
 import bounty.lib.BountyHelper;
+import bounty.lib.LevelPicker;
 import bounty.manager.Settings;
 import bounty.manager.intel.entity.Assassination;
 
@@ -40,7 +41,7 @@ public class BountyManager extends BaseEventManager {
     @Override
     protected EveryFrameScript createEvent() {
         try {
-            int level = BountyHelper.pickLevel();
+            int level = LevelPicker.pickLevel();
             int bountyCredits = BountyHelper.calculateBountyCredits(level);
             MarketAPI hideout = BountyHelper.pickHideout(level);
             PersonAPI person = BountyHelper.createPerson(level, hideout.getFactionId());
