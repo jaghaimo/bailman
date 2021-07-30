@@ -1,4 +1,4 @@
-package bountylib;
+package bountylib.experimental;
 
 import java.util.Arrays;
 import java.util.List;
@@ -7,14 +7,12 @@ import java.util.Random;
 import com.fs.starfarer.api.campaign.FleetAssignment;
 
 /**
- * Manages assignment AI.
+ * Manages assignment AI. Stub for now.
  * 
  * TODO: Needs much better implementation.
  * 
  * TODO: Needs support compound AIs (e.g. go to X, wait Z days, go to Y,
  * despawn).
- * 
- * Currently unused.
  */
 public class AssignmentAi {
 

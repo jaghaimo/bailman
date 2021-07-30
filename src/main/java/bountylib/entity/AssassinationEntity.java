@@ -23,6 +23,9 @@ import lombok.RequiredArgsConstructor;
 /**
  * An assassination contract is a variation on regular bounty. The only
  * requirement for this bounty is to kill the flagship.
+ * 
+ * TODO: Needs custom AI - should be against patrol fleets that randomly patrol
+ * entities within the system.
  */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,7 +43,6 @@ public class AssassinationEntity implements BountyEntity {
         this(bountyCredits, fleet.getFaction(), fleet, person, hideout);
         this.activity = fleet.getAI().getCurrentAssignmentType().getDescription().toLowerCase();
         this.activity = this.activity.replaceAll("system", "around");
-        // TODO: Fleet comes with random AI, we need something better here.
     }
 
     public void addBulletPoints(BountyIntel plugin, TooltipMakerAPI info, ListInfoMode mode) {
