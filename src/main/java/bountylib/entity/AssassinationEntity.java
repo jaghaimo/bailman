@@ -7,7 +7,6 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin.ListInfoMode;
-import com.fs.starfarer.api.characters.FullName.Gender;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.intel.PersonBountyIntel.BountyResult;
@@ -17,32 +16,30 @@ import com.fs.starfarer.api.util.Misc;
 
 import bountylib.BountyHelper;
 import bountylib.BountyIntel;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * An assassination contract is a variation on regular bounty. The only
  * requirement for this bounty is to kill the flagship.
  */
 @Getter
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class AssassinationEntity implements BountyEntity {
 
     private String activity;
-    private int bountyCredits;
-    private FactionAPI faction;
-    private CampaignFleetAPI fleet;
-    private PersonAPI person;
-    private SectorEntityToken hideout;
 
-    public AssassinationEntity(int b, CampaignFleetAPI f, PersonAPI p, SectorEntityToken h) {
-        activity = f.getAI().getCurrentAssignmentType().getDescription().toLowerCase();
-        activity = activity.replaceAll("system", "around");
+    private final int bountyCredits;
+    private final FactionAPI faction;
+    private final CampaignFleetAPI fleet;
+    private final PersonAPI person;
+    private final SectorEntityToken hideout;
 
-        bountyCredits = b;
-        fleet = f;
-        faction = f.getFaction();
-        hideout = h;
-        person = p;
-
+    public AssassinationEntity(int bountyCredits, CampaignFleetAPI fleet, PersonAPI person, SectorEntityToken hideout) {
+        this(bountyCredits, fleet.getFaction(), fleet, person, hideout);
+        this.activity = fleet.getAI().getCurrentAssignmentType().getDescription().toLowerCase();
+        this.activity = this.activity.replaceAll("system", "around");
         // TODO: Fleet comes with random AI, we need something better here.
     }
 
@@ -105,10 +102,9 @@ public class AssassinationEntity implements BountyEntity {
 
         // bounty is still available for completion
         if (result == null) {
-            String heOrShe = (person.getGender() == Gender.MALE) ? "He " : "She ";
             String isOrWas = fleet.getAI().getCurrentAssignmentType() == null ? "was last seen " : "is ";
             info.addPara(
-                    heOrShe + isOrWas + activity + " " + hideout.getName() + " in the "
+                    person.getHeOrShe() + isOrWas + activity + " " + hideout.getName() + " in the "
                             + hideout.getStarSystem().getName() + ".",
                     10f, Misc.getHighlightColor(), hideout.getName(), hideout.getStarSystem().getName());
 
@@ -116,9 +112,8 @@ public class AssassinationEntity implements BountyEntity {
             int cols = 7;
             int rows = (int) Math.ceil(list.size() / cols) + 1;
             float iconSize = width / cols;
-            String h = (person.getGender() == Gender.MALE) ? "his" : "her";
-            info.addPara("The assassination contract also contains full intel on the ships under " + h + " command.",
-                    10f);
+            info.addPara("The assassination contract also contains full intel on the ships under "
+                    + person.getHisOrHer() + " command.", 10f);
             info.addShipList(cols, rows, iconSize, plugin.getFactionForUIColors().getBaseUIColor(), list, 10f);
         }
     }
