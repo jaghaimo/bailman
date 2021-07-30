@@ -1,4 +1,4 @@
-package bounty.lib;
+package bountylib;
 
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.impl.campaign.shared.PersonBountyEventData;

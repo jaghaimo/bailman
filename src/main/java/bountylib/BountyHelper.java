@@ -1,4 +1,4 @@
-package bounty.lib;
+package bountylib;
 
 import java.awt.Color;
 
@@ -15,12 +15,12 @@ import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
 import com.fs.starfarer.api.util.Misc;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 
-import bounty.manager.Constants;
-
 /**
  * TODO: This monolitic helper needs to be split up.
  */
 public class BountyHelper {
+
+    public final static String[] DANGER_LEVEL = { "none", "low", "medium", "high", "very high" };
 
     public static int calculateBountyCredits(int level) {
         float base = Global.getSettings().getFloat("basePersonBounty");
@@ -52,9 +52,9 @@ public class BountyHelper {
 
     public static String getDangerLevel(CampaignFleetAPI fleet) {
         int dangerLevel = Misc.getDangerLevel(fleet);
-        int maxDangerLevel = Constants.DANGER_LEVEL.length;
+        int maxDangerLevel = DANGER_LEVEL.length;
 
-        return Constants.DANGER_LEVEL[Math.min(dangerLevel, maxDangerLevel) - 1];
+        return DANGER_LEVEL[Math.min(dangerLevel, maxDangerLevel) - 1];
     }
 
     public static MarketAPI pickHideout(int level) {

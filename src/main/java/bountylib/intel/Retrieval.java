@@ -1,8 +1,9 @@
-package bounty.manager.intel.entity;
+package bountylib.intel;
 
 import java.awt.Color;
 import java.util.List;
 
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
@@ -12,29 +13,35 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import com.fs.starfarer.api.impl.campaign.intel.PersonBountyIntel.BountyResult;
 import com.fs.starfarer.api.impl.campaign.intel.PersonBountyIntel.BountyResultType;
+import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BreadcrumbSpecial;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-import bounty.lib.BountyHelper;
-import bounty.manager.intel.BountyIntel;
-import bounty.manager.intel.IntelEntity;
+import bountylib.BountyHelper;
 
-public class Assassination implements IntelEntity {
+/**
+ * Retrieval mission, defeat enemy fleet and retrieve the flagship. If
+ * successfully retrieved, give an option to either lie to the employer (keep
+ * the ship at the cost of small relationship penalty), or return it as per
+ * contract (credits and reputation gain). If not retrieved (either destroyed or
+ * scrapped) gain half of the credits and no reputation.
+ * 
+ * # TODO: This is unfinished
+ */
+public class Retrieval implements IntelEntity {
 
-    private String activity;
     private int bountyCredits;
+    private int reputationGain;
     private FactionAPI faction;
     private CampaignFleetAPI fleet;
     private PersonAPI person;
     private SectorEntityToken hideout;
 
-    public Assassination(int b, CampaignFleetAPI f, PersonAPI p, SectorEntityToken h) {
-        activity = f.getAI().getCurrentAssignmentType().getDescription().toLowerCase();
-        activity = activity.replaceAll("system", "around");
-
+    public Retrieval(int b, int r, CampaignFleetAPI c, FactionAPI f, PersonAPI p, SectorEntityToken h) {
         bountyCredits = b;
-        fleet = f;
-        faction = f.getFaction();
+        reputationGain = r;
+        fleet = c;
+        faction = f;
         hideout = h;
         person = p;
     }
@@ -83,7 +90,9 @@ public class Assassination implements IntelEntity {
         BountyResult result = plugin.getResult();
 
         info.addImage(getIcon(), width, 128, 10f);
-        info.addPara("An unknown party is requesting an assassination of " + person.getName().getFullName(), 10f);
+        info.addPara("An official hailing from " + faction.getDisplayNameWithArticle()
+                + " goverment is requesting retrival of a highly experimental flagship that was stolen by "
+                + person.getName().getFullName(), 10f);
 
         // bounty completed
         if (result != null) {
@@ -98,20 +107,20 @@ public class Assassination implements IntelEntity {
 
         // bounty is still available for completion
         if (result == null) {
+            SectorEntityToken fake = hideout.getContainingLocation().createToken(0, 0);
+            fake.setOrbit(Global.getFactory().createCircularOrbit(hideout, 0, 1000, 100));
+            String loc = BreadcrumbSpecial.getLocatedString(fake);
+            loc = loc.replaceAll("orbiting", "hiding out near");
+            loc = loc.replaceAll("located in", "hiding out in");
             String heOrShe = (person.getGender() == Gender.MALE) ? "He " : "She ";
-            String isOrWas = fleet.getAI().getCurrentAssignmentType() == null ? "was last seen " : "is ";
-            info.addPara(
-                    heOrShe + isOrWas + activity + " " + hideout.getName() + " in the "
-                            + hideout.getStarSystem().getName() + ".",
-                    10f, Misc.getHighlightColor(), hideout.getName(), hideout.getStarSystem().getName());
+            info.addPara(heOrShe + " rumored to be " + loc + ".", 10f);
 
             List<FleetMemberAPI> list = fleet.getFleetData().getMembersListCopy();
             int cols = 7;
             int rows = (int) Math.ceil(list.size() / cols) + 1;
             float iconSize = width / cols;
             String h = (person.getGender() == Gender.MALE) ? "his" : "her";
-            info.addPara("The assassination contract also contains full intel on the ships under " + h + " command.",
-                    10f);
+            info.addPara("The contract also contains full intel on the ships under " + h + " command.", 10f);
             info.addShipList(cols, rows, iconSize, plugin.getFactionForUIColors().getBaseUIColor(), list, 10f);
         }
     }
@@ -124,14 +133,14 @@ public class Assassination implements IntelEntity {
         String n = person.getName().getFullName();
 
         if (result == null) {
-            return "Assassination - " + n;
+            return "Retrieval - " + n;
         }
 
         if (result.type == BountyResultType.END_PLAYER_BOUNTY) {
-            return "Assassination Completed - " + n;
+            return "Retrieval Completed - " + n;
         }
 
-        return "Assassination Ended - " + n;
+        return "Retrieval Ended - " + n;
     }
 
     public String getIcon() {

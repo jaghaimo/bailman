@@ -1,4 +1,4 @@
-package bounty.manager.intel;
+package bountylib.intel;
 
 import com.fs.starfarer.api.campaign.comm.IntelInfoPlugin.ListInfoMode;
 import com.fs.starfarer.api.impl.campaign.intel.PersonBountyIntel.BountyResult;

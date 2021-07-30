@@ -1,4 +1,4 @@
-package bounty.lib;
+package bountylib;
 
 import java.util.Random;
 

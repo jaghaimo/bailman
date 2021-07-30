@@ -1,4 +1,4 @@
-package bounty.manager.intel;
+package bountylib.example;
 
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
@@ -7,35 +7,38 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseEventManager;
 
-import bounty.lib.BountyHelper;
-import bounty.lib.LevelPicker;
-import bounty.manager.Settings;
-import bounty.manager.intel.entity.Assassination;
+import bountylib.BountyHelper;
+import bountylib.LevelPicker;
+import bountylib.intel.Assassination;
+import bountylib.intel.BountyIntel;
+import bountylib.intel.IntelEntity;
 
+/**
+ * This is an example of a bounty manager implemented using BountyLib.
+ * 
+ * Note: This class is not used anywhere
+ */
 public class BountyManager extends BaseEventManager {
 
-    private static final String KEY = "$bailman_BountyManager";
+    // Note: Make sure your KEY is unique across the modverse.
+    private static final String KEY = "$yourmod_BountyManager";
 
-    private int minBounties = Settings.BOUNTIES_MIN;
-    private int maxBounties = Settings.BOUNTIES_MAX;
+    // Note: These can come from your own settings file, from Starsector's
+    // settings, or be just hardcoded like here.
+    private static int MIN_BOUNTIES = 0;
+    private static int MAX_BOUNTIES = 4;
 
     public BountyManager() {
         super();
         Global.getSector().getMemoryWithoutUpdate().set(KEY, this);
     }
 
+    // Note: This is just a convenience method, not needed in your implementation.
+    // Just make sure you always fetch the same object.
     public static BountyManager getInstance() {
         Object bountyObject = Global.getSector().getMemoryWithoutUpdate().get(KEY);
 
         return (BountyManager) bountyObject;
-    }
-
-    public void setMaxBounties(int m) {
-        maxBounties = m;
-    }
-
-    public void setMinBounties(int m) {
-        minBounties = m;
     }
 
     @Override
@@ -56,11 +59,11 @@ public class BountyManager extends BaseEventManager {
 
     @Override
     protected int getMaxConcurrent() {
-        return maxBounties;
+        return MAX_BOUNTIES;
     }
 
     @Override
     protected int getMinConcurrent() {
-        return minBounties;
+        return MIN_BOUNTIES;
     }
 }

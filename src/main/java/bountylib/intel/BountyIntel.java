@@ -1,4 +1,4 @@
-package bounty.manager.intel;
+package bountylib.intel;
 
 import java.awt.Color;
 import java.util.Set;
