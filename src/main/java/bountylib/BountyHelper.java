@@ -4,11 +4,9 @@ import java.awt.Color;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
-import com.fs.starfarer.api.impl.campaign.events.OfficerManagerEvent;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetFactoryV3;
 import com.fs.starfarer.api.impl.campaign.fleets.FleetParamsV3;
 import com.fs.starfarer.api.impl.campaign.ids.FleetTypes;
@@ -27,12 +25,6 @@ public class BountyHelper {
         float random = perLevel * (int) (Math.random() * 30) / 15f;
 
         return (int) ((base + perLevel * level + random) * 1.5);
-    }
-
-    public static PersonAPI createPerson(int level, String factionId) {
-        FactionAPI faction = Global.getSector().getFaction(factionId);
-        int personLevel = (int) (5 + level * 1.5f);
-        return OfficerManagerEvent.createOfficer(faction, personLevel);
     }
 
     public static Color getDangerColor(CampaignFleetAPI fleet) {
