@@ -1,4 +1,4 @@
-package bountylib.level;
+package bountylib.difficulty.level;
 
 public interface LevelPicker {
 

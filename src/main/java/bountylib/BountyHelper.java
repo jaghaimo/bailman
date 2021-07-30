@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.FleetAssignment;
 import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
@@ -48,12 +49,10 @@ public class BountyHelper {
         return DANGER_LEVEL[Math.min(dangerLevel, maxDangerLevel) - 1];
     }
 
-    public static CampaignFleetAPI spawnFleet(int level, MarketAPI hideout, PersonAPI person) {
+    public static CampaignFleetAPI spawnFleet(float fp, float qf, MarketAPI hideout, PersonAPI person) {
         String fleetFactionId = person.getFaction().getId();
         String fleetName = "";
         fleetName = person.getName().getLast() + "'s Fleet";
-        float qf = Math.max((float) level / 10f, 1) + 0.3f;
-        float fp = calculateFp(level);
 
         FleetParamsV3 params = new FleetParamsV3(null, hideout.getLocationInHyperspace(), fleetFactionId, //
                 qf, // quality
@@ -76,28 +75,8 @@ public class BountyHelper {
         LocationAPI location = hideout.getContainingLocation();
         location.addEntity(fleet);
         fleet.setLocation(hideout.getLocation().x - 500, hideout.getLocation().y + 500);
-        fleet.getAI().addAssignment(AssignmentAi.getRandomAssignment(), hideout.getPrimaryEntity(), 1000000f, null);
+        fleet.getAI().addAssignment(FleetAssignment.ORBIT_AGGRESSIVE, hideout.getPrimaryEntity(), 1000000f, null);
 
         return fleet;
-    }
-
-    private static float calculateFp(int level) {
-        float fp = (5 + level * 5) * 5f;
-        fp *= 0.75f + (float) Math.random() * 0.25f;
-
-        if (level >= 7) {
-            fp += 20f;
-        }
-        if (level >= 8) {
-            fp += 30f;
-        }
-        if (level >= 9) {
-            fp += 50f;
-        }
-        if (level >= 10) {
-            fp += 50f;
-        }
-
-        return fp;
     }
 }
