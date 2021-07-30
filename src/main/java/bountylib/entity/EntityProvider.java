@@ -5,8 +5,8 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.characters.PersonAPI;
 
 import bountylib.BountyHelper;
+import bountylib.level.DefaultLevel;
 import bountylib.location.CoreWorld;
-import level.DefaultLevel;
 
 /**
  * A convenience class for providing supported bounties
