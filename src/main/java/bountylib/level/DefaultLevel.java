@@ -7,6 +7,9 @@ import com.fs.starfarer.api.impl.campaign.intel.bases.PirateBaseManager;
 
 import bountylib.BountyEventData;
 
+/**
+ * Vanilla implementation of level picker.
+ */
 public class DefaultLevel implements LevelPicker {
 
     @Override
@@ -27,7 +30,7 @@ public class DefaultLevel implements LevelPicker {
         return level;
     }
 
-    private int pickAnyLevel() {
+    protected int pickAnyLevel() {
         int level = BountyEventData.getSharedData().getLevel();
         float timeFactor = (PirateBaseManager.getInstance().getDaysSinceStart() - 180f) / (365f * 2f);
         timeFactor = Math.min(timeFactor, 0);
