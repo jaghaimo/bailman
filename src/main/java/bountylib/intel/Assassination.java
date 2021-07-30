@@ -39,6 +39,8 @@ public class Assassination implements IntelEntity {
         faction = f.getFaction();
         hideout = h;
         person = p;
+
+        // TODO: Fleet comes with random AI, we need something better here.
     }
 
     public void addBulletPoints(BountyIntel plugin, TooltipMakerAPI info, ListInfoMode mode) {

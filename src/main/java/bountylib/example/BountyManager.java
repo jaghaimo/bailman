@@ -8,10 +8,10 @@ import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseEventManager;
 
 import bountylib.BountyHelper;
-import bountylib.LevelPicker;
 import bountylib.intel.Assassination;
 import bountylib.intel.BountyIntel;
 import bountylib.intel.IntelEntity;
+import level.DefaultLevel;
 
 /**
  * This is an example of a bounty manager implemented using BountyLib.
@@ -44,7 +44,7 @@ public class BountyManager extends BaseEventManager {
     @Override
     protected EveryFrameScript createEvent() {
         try {
-            int level = LevelPicker.pickLevel();
+            int level = new DefaultLevel().pickLevel();
             int bountyCredits = BountyHelper.calculateBountyCredits(level);
             MarketAPI hideout = BountyHelper.pickHideout(level);
             PersonAPI person = BountyHelper.createPerson(level, hideout.getFactionId());
