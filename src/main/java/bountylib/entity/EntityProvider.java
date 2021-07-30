@@ -13,7 +13,7 @@ import level.DefaultLevel;
  */
 public class EntityProvider {
 
-    public static AssassinationEntity makeAssassinationEntity() {
+    public static AssassinationEntity assassinationEntity() {
         int level = new DefaultLevel().pickLevel();
         int bountyCredits = BountyHelper.calculateBountyCredits(level);
         MarketAPI hideout = new CoreWorld(level).pickHideout();
@@ -21,6 +21,5 @@ public class EntityProvider {
         CampaignFleetAPI fleet = BountyHelper.spawnFleet(level, hideout, person);
 
         return new AssassinationEntity(bountyCredits, fleet, person, hideout.getPrimaryEntity());
-
     }
 }

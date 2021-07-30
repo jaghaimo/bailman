@@ -40,7 +40,8 @@ public class AssassinationBountyManager extends BaseEventManager {
     protected EveryFrameScript createEvent() {
         try {
 
-            AssassinationEntity entity = EntityProvider.makeAssassinationEntity();
+            AssassinationEntity entity = EntityProvider.assassinationEntity();
+            // Note: Now is a good time to modify the object if desired
 
             return new BountyIntel(entity, entity.getFleet(), entity.getPerson(), entity.getHideout());
         } catch (Exception exception) {
