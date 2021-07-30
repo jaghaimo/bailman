@@ -1,8 +1,8 @@
 package bountylib.location;
 
-import com.fs.starfarer.api.campaign.econ.MarketAPI;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 
 public interface LocationPicker {
 
-    public MarketAPI pickHideout();
+    public SectorEntityToken pickHideout();
 }

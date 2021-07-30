@@ -1,6 +1,7 @@
 package bountylib.location;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.util.WeightedRandomPicker;
 
@@ -16,7 +17,7 @@ public class CoreWorld implements LocationPicker {
 
     private int level;
 
-    public MarketAPI pickHideout() {
+    public SectorEntityToken pickHideout() {
         WeightedRandomPicker<MarketAPI> picker = new WeightedRandomPicker<MarketAPI>();
 
         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
@@ -32,6 +33,6 @@ public class CoreWorld implements LocationPicker {
             picker.add(market, weight);
         }
 
-        return picker.pick();
+        return picker.pick().getPrimaryEntity();
     }
 }

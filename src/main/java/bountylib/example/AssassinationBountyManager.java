@@ -39,7 +39,6 @@ public class AssassinationBountyManager extends BaseEventManager {
     @Override
     protected EveryFrameScript createEvent() {
         try {
-
             AssassinationEntity entity = EntityProvider.assassinationEntity();
             // Note: Now is a good time to modify the object if desired
 

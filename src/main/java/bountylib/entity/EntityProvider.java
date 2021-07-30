@@ -16,7 +16,7 @@ public class EntityProvider {
     public static AssassinationEntity assassinationEntity() {
         int level = new DefaultLevel().pickLevel();
         int bountyCredits = BountyHelper.calculateBountyCredits(level);
-        MarketAPI hideout = new CoreWorld(level).pickHideout();
+        MarketAPI hideout = new CoreWorld(level).pickHideout().getMarket();
         PersonAPI person = BountyHelper.createPerson(level, hideout.getFactionId());
         CampaignFleetAPI fleet = BountyHelper.spawnFleet(level, hideout, person);
 
