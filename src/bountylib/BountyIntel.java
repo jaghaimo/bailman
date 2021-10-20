@@ -1,4 +1,4 @@
-package bailman.intel;
+package bountylib;
 
 import java.awt.Color;
 import java.util.Set;
@@ -22,6 +22,8 @@ import com.fs.starfarer.api.ui.SectorMapAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
+import bountylib.entity.BountyEntity;
+
 public class BountyIntel extends BaseIntelPlugin implements FleetEventListener {
 
     private float elapsedDays = 0f;
@@ -29,11 +31,11 @@ public class BountyIntel extends BaseIntelPlugin implements FleetEventListener {
 
     private BountyResult result;
     private CampaignFleetAPI fleet;
-    private IntelEntity entity;
+    private BountyEntity entity;
     private PersonAPI person;
     private SectorEntityToken hideout;
 
-    public BountyIntel(IntelEntity e, CampaignFleetAPI f, PersonAPI p, SectorEntityToken h) {
+    public BountyIntel(BountyEntity e, CampaignFleetAPI f, PersonAPI p, SectorEntityToken h) {
         entity = e;
         fleet = f;
         hideout = h;
@@ -181,6 +183,8 @@ public class BountyIntel extends BaseIntelPlugin implements FleetEventListener {
             cleanUp(!fleet.isInCurrentLocation());
             return;
         }
+
+        // TODO: Add AiManager that will update fleet's AI as needed (for compound AIs)
     }
 
     @Override

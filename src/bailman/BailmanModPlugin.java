@@ -2,10 +2,9 @@ package bailman;
 
 import com.fs.starfarer.api.BaseModPlugin;
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.impl.campaign.intel.BaseEventManager;
 
 import org.json.JSONObject;
-
-import bailman.intel.BountyManager;
 
 public class BailmanModPlugin extends BaseModPlugin {
 
@@ -38,14 +37,14 @@ public class BailmanModPlugin extends BaseModPlugin {
     }
 
     private void registerBountyManager() {
-        BountyManager bountyManager = BountyManager.getInstance();
+        BaseEventManager bountyManager = AssassinationBountyManager.getInstance();
         if (bountyManager == null) {
-            bountyManager = new BountyManager();
+            bountyManager = new AssassinationBountyManager();
         }
 
         // apply current settings
-        bountyManager.setMinBounties(settings.getMin());
-        bountyManager.setMaxBounties(settings.getMax());
+        AssassinationBountyManager.MIN_BOUNTIES = settings.getMin();
+        AssassinationBountyManager.MAX_BOUNTIES = settings.getMin();
 
         // add to scripts
         Global.getSector().addScript(bountyManager);
