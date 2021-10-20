@@ -1,4 +1,4 @@
-package bailman.intel.entity;
+package bountylib.experimental;
 
 import java.awt.Color;
 import java.util.List;
@@ -17,18 +17,28 @@ import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.special.BreadcrumbSpec
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
 import com.fs.starfarer.api.util.Misc;
 
-import bailman.helper.BountyHelper;
-import bailman.intel.BountyIntel;
-import bailman.intel.IntelEntity;
+import bountylib.BountyHelper;
+import bountylib.BountyIntel;
+import bountylib.entity.BountyEntity;
+import lombok.Getter;
 
 /**
  * Retrieval mission, defeat enemy fleet and retrieve the flagship. If
  * successfully retrieved, give an option to either lie to the employer (keep
  * the ship at the cost of small relationship penalty), or return it as per
- * contract (credits and reputation gain). If not retrieved (either destroyed or
- * scrapped) gain half of the credits and no reputation.
+ * contract (credits and reputation gain). If not retrieved (e.g. scrapped, as
+ * it always is retrievable) gain half of the credits and no reputation.
+ * 
+ * TODO: Make this intel acceptable (requires agreement, will loose rep if
+ * failed).
+ * 
+ * TODO: Make flagship always retrieavable
+ * 
+ * TODO: Modify intel to indicate where the ship needs to be delivered. Starts
+ * new 90d timer. Add option to break that part of the contract.
  */
-public class Retrieval implements IntelEntity {
+@Getter
+public class RetrievalEntity implements BountyEntity {
 
     private int bountyCredits;
     private int reputationGain;
@@ -37,13 +47,15 @@ public class Retrieval implements IntelEntity {
     private PersonAPI person;
     private SectorEntityToken hideout;
 
-    public Retrieval(int b, int r, CampaignFleetAPI c, FactionAPI f, PersonAPI p, SectorEntityToken h) {
+    public RetrievalEntity(int b, int r, CampaignFleetAPI c, FactionAPI f, PersonAPI p, SectorEntityToken h)
+            throws Exception {
         bountyCredits = b;
         reputationGain = r;
         fleet = c;
         faction = f;
         hideout = h;
         person = p;
+        throw new Exception("Not implemented.");
     }
 
     public void addBulletPoints(BountyIntel plugin, TooltipMakerAPI info, ListInfoMode mode) {
