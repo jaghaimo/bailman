@@ -35,8 +35,8 @@ public class BountyHelper {
     }
 
     public static PersonAPI createPerson(int level, String factionId) {
-        int personLevel = (int) (5 + level * 1.5f);
-        return OfficerManagerEvent.createOfficer(Global.getSector().getFaction(factionId), personLevel, true, false);
+        int personLevel = Math.max(15, (int) (5 + level * 1.5f));// FIXME : Use max level from settings
+        return OfficerManagerEvent.createOfficer(Global.getSector().getFaction(factionId), personLevel, true);
     }
 
     public static Color getDangerColor(CampaignFleetAPI fleet) {
